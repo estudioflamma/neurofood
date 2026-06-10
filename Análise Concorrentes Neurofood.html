@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board de Inteligência Competitiva — Neurofood 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --black:#000;--dark:#080808;--card:#111;--card2:#161616;
+    --border:#1e1e1e;--border2:#2a2a2a;
+    --green:#52C255;--green-glow:rgba(82,194,85,.12);
+    --white:#fff;--gray:#666;--gray-mid:#888;--gray-light:#aaa;
+  }
+  body{background:var(--black);color:var(--white);font-family:'Inter',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+  /* HEADER */
+  .header{background:#000;border-bottom:1px solid var(--border);padding:16px 48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .logo-area{display:flex;align-items:center;gap:14px}
+  .logo-mark{width:36px;height:36px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .logo-type{display:flex;flex-direction:column;gap:1px}
+  .logo-name{font-size:13px;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:#fff;line-height:1}
+  .logo-sub{font-size:10px;color:var(--gray-mid);letter-spacing:.12em;text-transform:uppercase}
+  .header-tag{font-size:11px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border2);padding:6px 14px;border-radius:20px}
+
+  /* NAV */
+  .nav{background:var(--dark);border-bottom:1px solid var(--border);padding:0 48px;display:flex;overflow-x:auto;scrollbar-width:none;position:sticky;top:69px;z-index:99;gap:2px;align-items:center}
+  .nav::-webkit-scrollbar{display:none}
+  .nav-btn{padding:13px 16px;background:none;border:none;color:var(--gray-mid);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;font-family:inherit}
+  .nav-btn:hover{color:var(--white)}
+  .nav-btn.active{color:var(--green);border-bottom-color:var(--green)}
+  .nav-sep{width:1px;height:24px;background:var(--border2);margin:0 8px;flex-shrink:0}
+  .nav-group-label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#333;padding:0 6px;white-space:nowrap}
+
+  /* SECTIONS */
+  .section{display:none;padding:40px 48px 64px;max-width:1440px;margin:0 auto;animation:fadeUp .3s ease}
+  .section.active{display:block}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* SECTION ACTIONS */
+  .section-actions{display:flex;gap:10px;justify-content:flex-end;margin-bottom:28px}
+
+  /* BRAND HERO */
+  .brand-hero{display:grid;grid-template-columns:320px 1fr;gap:24px;margin-bottom:24px}
+  .brand-id-card{background:var(--card);border-radius:16px;padding:28px;border:1px solid var(--border);display:flex;flex-direction:column}
+  .brand-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--green-glow);color:var(--green);border:1px solid rgba(82,194,85,.3);padding:4px 10px;border-radius:20px;margin-bottom:14px;width:fit-content}
+  .brand-badge.global{background:rgba(255,200,0,.08);color:#ffc800;border-color:rgba(255,200,0,.3)}
+  .brand-name{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1;margin-bottom:6px}
+  .brand-tagline{font-size:13px;color:var(--gray-light);font-style:italic;line-height:1.5;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+  .meta-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+  .meta-row{display:flex;align-items:flex-start;gap:10px;font-size:12px}
+  .meta-k{color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.08em;min-width:72px;flex-shrink:0;padding-top:1px}
+  .meta-v{color:var(--gray-light);line-height:1.5}
+  .meta-v a{color:var(--green);text-decoration:none}
+  .meta-v a:hover{text-decoration:underline}
+  .palette-row{margin-top:auto;padding-top:16px;border-top:1px solid var(--border)}
+  .palette-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:10px}
+  .palette{display:flex;gap:8px;flex-wrap:wrap}
+  .swatch{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .swatch-dot{width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+  .swatch-hex{font-size:9px;color:var(--gray);font-family:'SF Mono',monospace}
+
+  /* SCREENSHOTS PANEL */
+  .screenshots-panel{background:var(--card);border-radius:16px;padding:28px;border:1px solid var(--border)}
+  .panel-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+  .panel-hdr-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--gray-mid)}
+  .screenshots-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .shot-card{border-radius:12px;overflow:hidden;border:1px solid var(--border2);text-decoration:none;display:block;transition:all .2s;background:var(--card2)}
+  .shot-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 32px rgba(82,194,85,.1)}
+  .shot-preview{height:130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;font-size:28px}
+  .shot-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+  .shot-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:13px;font-weight:600;color:#fff;letter-spacing:.05em;gap:6px}
+  .shot-card:hover .shot-overlay{opacity:1}
+  .shot-footer{padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+  .shot-label{font-size:11px;color:var(--gray-light);font-weight:500}
+  .shot-arrow{font-size:11px;color:var(--green)}
+
+  /* ANALYSIS GRID */
+  .analysis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+  .a-card{background:var(--card);border-radius:12px;padding:22px;border:1px solid var(--border)}
+  .a-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--green);margin-bottom:10px}
+  .a-text{font-size:13px;color:var(--gray-light);line-height:1.65}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .tag{background:var(--card2);border:1px solid var(--border2);padding:3px 10px;border-radius:20px;font-size:11px;color:var(--gray-light)}
+  .tag.green{border-color:rgba(82,194,85,.4);color:var(--green);background:var(--green-glow)}
+  .tag.gold{border-color:rgba(255,200,0,.3);color:#ffc800;background:rgba(255,200,0,.06)}
+
+  /* INSIGHT */
+  .insight{background:linear-gradient(135deg,#091409,#0b1c0b);border:1px solid #1a3a1a;border-radius:16px;padding:24px 28px;margin-top:20px;position:relative;overflow:hidden}
+  .insight::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green);border-radius:0 2px 2px 0}
+  .insight-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--green);margin-bottom:8px}
+  .insight-text{font-size:13px;color:var(--gray-light);line-height:1.7}
+  .insight.gold-insight{background:linear-gradient(135deg,#1a1400,#1c1800);border-color:#2a2000}
+  .insight.gold-insight::before{background:#ffc800}
+  .insight.gold-insight .insight-label{color:#ffc800}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-size:11px;font-weight:700;text-decoration:none;cursor:pointer;transition:all .2s;border:none;letter-spacing:.08em;text-transform:uppercase;font-family:inherit}
+  .btn-green{background:var(--green);color:#000}
+  .btn-green:hover{background:#62d265}
+  .btn-ghost{background:transparent;color:var(--gray-light);border:1px solid var(--border2)}
+  .btn-ghost:hover{border-color:var(--green);color:var(--green)}
+  .btn-gold{background:transparent;color:#ffc800;border:1px solid rgba(255,200,0,.35)}
+  .btn-gold:hover{background:rgba(255,200,0,.08)}
+
+  /* PANORAMA SPECIFIC */
+  .pano-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px}
+  .stat-num{font-size:32px;font-weight:900;color:var(--white);letter-spacing:-.02em;line-height:1}
+  .stat-num span{color:var(--green)}
+  .stat-label{font-size:11px;color:var(--gray);margin-top:6px;text-transform:uppercase;letter-spacing:.1em}
+  .stat-sub{font-size:11px;color:var(--gray-mid);margin-top:4px}
+  .compare-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+  .compare-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--gray);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--dark)}
+  .compare-table td{font-size:12px;color:var(--gray-light);padding:11px 14px;border-bottom:1px solid var(--border);line-height:1.4}
+  .compare-table tr:hover td{background:var(--card)}
+  .compare-table td:first-child{color:var(--white);font-weight:700}
+  .dot-br{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;vertical-align:middle}
+  .dot-global{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ffc800;margin-right:6px;vertical-align:middle}
+
+  /* NEUROFOOD STRATEGY */
+  .strategy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+  .pillar-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;overflow:hidden}
+  .pillar-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
+  .pillar-num{font-size:32px;font-weight:900;color:rgba(82,194,85,.15);letter-spacing:-.03em;margin-bottom:8px}
+  .pillar-title{font-size:14px;font-weight:800;color:var(--white);margin-bottom:8px}
+  .pillar-text{font-size:12px;color:var(--gray-light);line-height:1.6}
+  .pillar-phrase{font-size:11px;font-weight:700;color:var(--green);margin-top:10px;font-style:italic}
+  .persona-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+  .persona-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px}
+  .persona-avatar{font-size:36px;margin-bottom:10px}
+  .persona-name{font-size:16px;font-weight:800;color:var(--white);margin-bottom:2px}
+  .persona-role{font-size:11px;color:var(--green);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+  .persona-text{font-size:12px;color:var(--gray-light);line-height:1.6}
+  .persona-tension{margin-top:12px;padding:10px 14px;background:var(--card2);border-radius:8px;border-left:2px solid var(--green)}
+  .pt-label{font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--green);margin-bottom:3px}
+  .pt-text{font-size:11px;color:var(--gray-light)}
+  .manifesto-block{background:linear-gradient(135deg,#091409,#0b1c0b);border:1px solid #1a3a1a;border-radius:16px;padding:36px 40px;margin-bottom:24px}
+  .manifesto-text{font-size:16px;color:rgba(255,255,255,.75);line-height:2;font-weight:400}
+  .manifesto-text strong{color:var(--white);font-weight:800}
+  .manifesto-cta{font-size:18px;font-weight:900;color:var(--green);margin-top:24px;letter-spacing:-.01em}
+
+  /* SECTION HEADER */
+  .sec-hdr{margin-bottom:28px}
+  .sec-eyebrow{font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+  .sec-eyebrow.gold{color:#ffc800}
+  .sec-title{font-size:28px;font-weight:900;letter-spacing:-.02em;color:var(--white);margin-bottom:8px}
+  .sec-body{font-size:14px;color:var(--gray-mid);line-height:1.6;max-width:700px}
+
+  /* FOOTER */
+  .nf-footer{margin-top:56px;padding:32px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .nf-footer-text{font-size:11px;color:var(--gray);letter-spacing:.08em}
+  .nf-footer-text strong{color:var(--green)}
+
+  @media print{
+    .nav,.header,.section-actions,.nf-footer{display:none!important}
+    .section{display:block!important;padding:32px;page-break-after:always}
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-area">
+    <div class="logo-mark">🧠</div>
+    <div class="logo-type">
+      <span class="logo-name">Neuro Food</span>
+      <span class="logo-sub">Repositioning Lab</span>
+    </div>
+  </div>
+  <span class="header-tag">Board de Inteligência Competitiva · 2026</span>
+</header>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('panorama',this)">🗺 Panorama</button>
+  <div class="nav-sep"></div>
+  <span class="nav-group-label">BR</span>
+  <button class="nav-btn" onclick="show('apx',this)">APX</button>
+  <button class="nav-btn" onclick="show('gelo',this)">Gelo Health</button>
+  <button class="nav-btn" onclick="show('audaxer',this)">Audaxer</button>
+  <button class="nav-btn" onclick="show('maxrecovery',this)">Max Recovery</button>
+  <button class="nav-btn" onclick="show('relaxmedic',this)">RelaxMedic</button>
+  <button class="nav-btn" onclick="show('ava',this)">AVA</button>
+  <button class="nav-btn" onclick="show('goarctic',this)">Go Arctic</button>
+  <div class="nav-sep"></div>
+  <span class="nav-group-label">GLOBAL</span>
+  <button class="nav-btn" onclick="show('therabody',this)">Therabody</button>
+  <button class="nav-btn" onclick="show('hyperice',this)">Hyperice</button>
+  <button class="nav-btn" onclick="show('higherdose',this)">HigherDOSE</button>
+  <button class="nav-btn" onclick="show('cadence',this)">Cadence</button>
+  <div class="nav-sep"></div>
+  <button class="nav-btn" onclick="show('neurofood',this)" style="color:var(--green)">🧠 Neurofood</button>
+</nav>
+
+<!-- ═══ PANORAMA ═══ -->
+<section class="section active" id="sec-panorama">
+  <div class="sec-hdr">
+    <div class="sec-eyebrow">Visão Geral</div>
+    <div class="sec-title">O Mercado Brasileiro de Recovery</div>
+    <div class="sec-body">7 concorrentes nacionais mapeados + 4 referências globais. Uma análise de posicionamento, identidade visual e oportunidades estratégicas para a Neurofood.</div>
+  </div>
+
+  <div class="pano-grid">
+    <div class="stat-card">
+      <div class="stat-num"><span>7</span></div>
+      <div class="stat-label">Concorrentes BR mapeados</div>
+      <div class="stat-sub">APX, Gelo Health, Audaxer, Max Recovery, RelaxMedic, AVA, Go Arctic</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num"><span>4</span></div>
+      <div class="stat-label">Benchmarks globais</div>
+      <div class="stat-sub">Therabody, Hyperice, HigherDOSE, Cadence</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">85<span>k</span></div>
+      <div class="stat-label">Maior audiência BR</div>
+      <div class="stat-sub">APX (@apexperformancebr) — líder em seguidores</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num"><span>0</span></div>
+      <div class="stat-label">Marcas com território de ritual</div>
+      <div class="stat-sub">Nenhuma comunica recovery como cultura. Espaço aberto para Neurofood.</div>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:24px">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
+      <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--gray-mid)">Comparativo — Concorrentes Brasileiros</span>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Marca</th><th>Segmento</th><th>Instagram</th><th>Ticket</th><th>Território</th><th>Principal Fraqueza</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="dot-br"></span>APX</td><td>Biohacking premium</td><td>85,3k @apexperformancebr</td><td>Médio-alto (R$447+)</td><td>Lifestyle + ciência</td><td>Sem ritual, sem comunidade</td></tr>
+        <tr><td><span class="dot-br"></span>Gelo Health</td><td>Crioterapia D2C</td><td>31,5k @gelohealth.com.br</td><td>Médio (R$1.200+)</td><td>Produto banheira</td><td>Nome limita expansão</td></tr>
+        <tr><td><span class="dot-br"></span>Audaxer</td><td>Dark performance</td><td>3,8k @audaxeroficial</td><td>Acessível</td><td>Combat sports</td><td>Nicho pequeno, sem narrativa</td></tr>
+        <tr><td><span class="dot-br"></span>Max Recovery</td><td>B2B técnico</td><td>—</td><td>Alto (B2B)</td><td>Profissional/federações</td><td>Zero cultura de marca</td></tr>
+        <tr><td><span class="dot-br"></span>RelaxMedic</td><td>Varejo bem-estar</td><td>@relaxmedic_</td><td>Baixo (desconto)</td><td>Generalista</td><td>Sem posicionamento claro</td></tr>
+        <tr><td><span class="dot-br"></span>AVA</td><td>Institucional atletas</td><td>@avanutri_ava</td><td>Alto</td><td>Técnico/seleções</td><td>Frio, sem desejo</td></tr>
+        <tr><td><span class="dot-br"></span>Go Arctic</td><td>Conversão preço</td><td>@goarcticbr</td><td>Baixo</td><td>Desconto D2C</td><td>Sem diferencial</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="analysis-grid">
+    <div class="a-card">
+      <div class="a-title">📍 Espaço livre no mercado</div>
+      <div class="a-text">Nenhuma marca brasileira ocupa o cruzamento entre <strong style="color:#fff">cultura + premium + ritual</strong>. Todos vendem produto. Ninguém vende o que o produto representa. A Neurofood tem o posicionamento e a estética para ser a primeira.</div>
+      <div class="tags"><span class="tag green">Território disponível</span><span class="tag green">Primeiro mover</span></div>
+    </div>
+    <div class="a-card">
+      <div class="a-title">📊 Concentração de audiência</div>
+      <div class="a-text">APX domina o awareness com 85k seguidores. Os demais têm audiências pequenas ou focadas em B2B. Existe espaço enorme para uma marca com conteúdo, ritual e lifestyle fortemente definidos.</div>
+      <div class="tags"><span class="tag">APX lidera</span><span class="tag">Baixa concorrência de conteúdo</span></div>
+    </div>
+    <div class="a-card">
+      <div class="a-title">🌍 Gap vs. referências globais</div>
+      <div class="a-text">Therabody e Hyperice operam com décadas de brand-building e parcerias atletas. HigherDOSE inventou o segmento de luxury wellness. O Brasil não tem equivalente. Neurofood pode ser o HigherDOSE brasileiro — com energia e cultura nacionais.</div>
+      <div class="tags"><span class="tag gold">Referência: HigherDOSE</span><span class="tag gold">Referência: Hyperice</span></div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-label">Síntese Estratégica</div>
+    <div class="insight-text">O mercado brasileiro de recovery está na fase de produto. A Neurofood tem a oportunidade de pular essa fase e construir diretamente uma <strong>marca de cultura, ritual e comunidade</strong>. Enquanto concorrentes disputam equipamento e preço, a Neurofood pode ocupar um território mais amplo e proprietário: <strong>ser a marca que ensina o brasileiro a recuperar melhor, viver mais forte e usar o desconforto como ferramenta de evolução</strong>. A bandeira está disponível. É hora de cravar.</div>
+  </div>
+</section>
+
+<!-- ═══ APX ═══ -->
+<section class="section" id="sec-apx">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://apx.com.br" target="_blank">↗ Site</a>
+    <a class="btn btn-green" href="https://www.instagram.com/apexperformancebr/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge">Concorrente direto</span>
+      <div class="brand-name">APX</div>
+      <div class="brand-tagline">"Biohacking. Do básico bem feito ao alto nível."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://apx.com.br" target="_blank">apx.com.br</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/apexperformancebr/" target="_blank">@apexperformancebr</a> · 85,3k</span></div>
+        <div class="meta-row"><span class="meta-k">Bio</span><span class="meta-v">1ª Empresa de Biohacking do Brasil. Saúde, sono e performance.</span></div>
+        <div class="meta-row"><span class="meta-k">Produtos</span><span class="meta-v">BluBlockers, Recovery, Sleep, Performance</span></div>
+        <div class="meta-row"><span class="meta-k">Ticket</span><span class="meta-v">R$ 447 (óculos). Médio-alto.</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#f5f0e8"></div><span class="swatch-hex">#f5f0e8</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#b5631e"></div><span class="swatch-hex">#b5631e</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#1a1a1a;border-color:#333"></div><span class="swatch-hex">#1a1a1a</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Prints — Site &amp; Instagram</span><a class="btn btn-ghost" href="https://apx.com.br" target="_blank" style="font-size:10px;padding:6px 12px">Abrir ao vivo ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://apx.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f5f0e8,#d4c9b2)">
+            <img src="https://apx.com.br/cdn/shop/files/frame_1321316195_8f059bdf-dcb4-4aef-9089-f8ccc7866424.webp" referrerpolicy="no-referrer" alt="APX hero">
+            <div class="shot-overlay">↗ Abrir site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — hero editorial</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://apx.com.br/collections/blueblockers" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#b5631e,#7a3e0f)">
+            <img src="https://apx.com.br/cdn/shop/files/Apex-401_4.webp" referrerpolicy="no-referrer" alt="APX produto">
+            <div class="shot-overlay">↗ Ver produtos</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — linha BluBlockers</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/apexperformancebr/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d)">
+            <img src="https://apx.com.br/cdn/shop/files/frame_1321316057_1.webp" referrerpolicy="no-referrer" alt="APX instagram">
+            <div class="shot-overlay">↗ Ver Instagram</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — feed editorial</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/apexperformancebr/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a 60%,#b5631e)">
+            <span style="font-size:12px;font-weight:800;color:#f5f0e8;letter-spacing:.1em;text-align:center;padding:0 16px;position:relative;z-index:2">BIOHACKING<br>DO BÁSICO<br>AO ALTO NÍVEL</span>
+            <div class="shot-overlay">↗ Ver feed</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — copy feed</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Editorial fashion. Paleta neutra quente (creme + terracota) com preto. Fotografia de alta qualidade com modelos usando óculos. Tipografia aspiracional. Visual premium e distinto no mercado BR.</div><div class="tags"><span class="tag">Editorial</span><span class="tag">Premium</span><span class="tag">Neutro quente</span></div></div>
+    <div class="a-card"><div class="a-title">Tom de Voz</div><div class="a-text">Científico-casual. Direto, sem frufru. Biohacking como território central. Usa "o básico bem feito" — o mesmo território da Neurofood. Aspiracional sem ser arrogante. Educativo e acessível.</div><div class="tags"><span class="tag">Biohacking</span><span class="tag">Científico</span><span class="tag">Aspiracional</span></div></div>
+    <div class="a-card"><div class="a-title">Pontos Fracos</div><div class="a-text">Muito focado em óculos. Biohacking pode soar técnico e de nicho. Pouco foco em experiência, ritual e comunidade. Sem presença física relevante. Depende de um único produto hero.</div><div class="tags"><span class="tag">Nicho técnico</span><span class="tag">Sem rituais</span><span class="tag">Sem experiência</span></div></div>
+  </div>
+  <div class="insight">
+    <div class="insight-label">Oportunidade Neurofood</div>
+    <div class="insight-text">Enquanto a Apex fala sobre <strong>otimizar o corpo</strong>, a Neurofood pode falar sobre <strong>voltar para ele</strong>. APX é técnica e racional; a Neurofood é sensorial, cultural e ritualística. Não disputar biohacking de frente — ocupar o território do corpo, da presença e da cultura brasileira de recovery.</div>
+  </div>
+</section>
+
+<!-- ═══ GELO HEALTH ═══ -->
+<section class="section" id="sec-gelo">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://gelohealth.com.br" target="_blank">↗ Site</a>
+    <a class="btn btn-green" href="https://www.instagram.com/gelohealth.com.br/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge">Concorrente direto</span>
+      <div class="brand-name">Gelo Health</div>
+      <div class="brand-tagline">"Brrreak your limits! A banheira de água gelada do Brasil."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://gelohealth.com.br" target="_blank">gelohealth.com.br</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/gelohealth.com.br/" target="_blank">@gelohealth.com.br</a> · 31,5k</span></div>
+        <div class="meta-row"><span class="meta-k">Bio</span><span class="meta-v">Brrreak your limits! 🐻‍❄️</span></div>
+        <div class="meta-row"><span class="meta-k">Produto hero</span><span class="meta-v">Banheira 220V + Gelofogo® (3°C a 40°C)</span></div>
+        <div class="meta-row"><span class="meta-k">Destaques</span><span class="meta-v">Gelofogo®, Mapa Brasil, custo-benefício</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#1a6fb0"></div><span class="swatch-hex">#1a6fb0</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#ff6b1a"></div><span class="swatch-hex">#ff6b1a</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#fff;border-color:#333"></div><span class="swatch-hex">#ffffff</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Prints — Site &amp; Instagram</span><a class="btn btn-ghost" href="https://gelohealth.com.br" target="_blank" style="font-size:10px;padding:6px 12px">Abrir ao vivo ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://gelohealth.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a6fb0,#0d4480)">
+            <img src="https://gelohealth.com.br/cdn/shop/files/comprar-banheira-gelo-cripterapia-9.png" referrerpolicy="no-referrer" alt="Gelo Health">
+            <div class="shot-overlay">↗ Abrir site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — hero produto</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://gelohealth.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#0d2240,#1a6fb0)">
+            <img src="https://gelohealth.com.br/cdn/shop/files/gelo-health_banheira-de-gelo-crioterapia.png" referrerpolicy="no-referrer" alt="Gelo Health banheira">
+            <div class="shot-overlay">↗ Ver banheira</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — banheira inox</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/gelohealth.com.br/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a1a,#1a3f6b)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.1em">@gelohealth.com.br</div><div style="font-size:10px;color:#888;margin-top:4px">31,5k seguidores</div></div>
+            <div class="shot-overlay">↗ Ver perfil</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — perfil</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/gelohealth.com.br/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#ff6b1a,#c84010)">
+            <span style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.08em;text-align:center;position:relative;z-index:2">GELOFOGO®<br><span style="font-size:10px;font-weight:400;opacity:.85">3°C até 40°C</span></span>
+            <div class="shot-overlay">↗ Ver Gelofogo</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — key visual Gelofogo®</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Azul gelo e branco como base, laranja como acento de energia. Feed mostra diversidade de usuários. Site focado em conversão. Gelofogo® como inovação estratégica. Visual acessível e inclusivo.</div><div class="tags"><span class="tag">Azul gelo</span><span class="tag">Limpo</span><span class="tag">Produto-first</span></div></div>
+    <div class="a-card"><div class="a-title">Tom de Voz</div><div class="a-text">Empolgado ("Brrrr"). Científico quando necessário. Prova social forte via galeria de clientes usando. Gelofogo como inovação de valor. Menos lifestyle, mais produto e benefício.</div><div class="tags"><span class="tag">Direto</span><span class="tag">Acessível</span><span class="tag">Conversão</span></div></div>
+    <div class="a-card"><div class="a-title">Pontos Fracos</div><div class="a-text">Muito ligado ao produto banheira. O próprio nome "Gelo" limita expansão. Sem rituais, sem comunidade forte, sem lifestyle expansível. Tom um pouco genérico para ticket premium.</div><div class="tags"><span class="tag">Sem ritual</span><span class="tag">Nome limitante</span><span class="tag">Sem lifestyle</span></div></div>
+  </div>
+  <div class="insight">
+    <div class="insight-label">Oportunidade Neurofood</div>
+    <div class="insight-text">Enquanto a Gelo Health vende a banheira como <strong>objeto de desejo</strong>, a Neurofood pode vender o <strong>ritual que faz esse objeto ganhar sentido</strong>. Gelo Health tem produto; a Neurofood tem cultura. A marca que ensina o cliente a viver o protocolo ganha muito mais do que a que só vende o equipamento.</div>
+  </div>
+</section>
+
+<!-- ═══ AUDAXER ═══ -->
+<section class="section" id="sec-audaxer">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://audaxer.com.br" target="_blank">↗ Site</a>
+    <a class="btn btn-green" href="https://www.instagram.com/audaxeroficial/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge">Concorrente próximo</span>
+      <div class="brand-name">Audaxer</div>
+      <div class="brand-tagline">"CRUSH THE IMPOSSIBLE."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://audaxer.com.br" target="_blank">audaxer.com.br</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/audaxeroficial/" target="_blank">@audaxeroficial</a> · 3,8k</span></div>
+        <div class="meta-row"><span class="meta-k">Bio</span><span class="meta-v">Crush the impossible | Inovação e performance</span></div>
+        <div class="meta-row"><span class="meta-k">Produtos</span><span class="meta-v">Banheiras Series X, Motor, Soft Flask, Óculos</span></div>
+        <div class="meta-row"><span class="meta-k">Destaques</span><span class="meta-v">Casa Dopa/Frio, Alliance BJJ, Series X</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#0d0d0d;border-color:#333"></div><span class="swatch-hex">#0d0d0d</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#c5f135"></div><span class="swatch-hex">#c5f135</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#fff;border-color:#333"></div><span class="swatch-hex">#ffffff</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Prints — Site &amp; Instagram</span><a class="btn btn-ghost" href="https://audaxer.com.br" target="_blank" style="font-size:10px;padding:6px 12px">Abrir ao vivo ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://audaxer.com.br" target="_blank">
+          <div class="shot-preview" style="background:#0d0d0d">
+            <img src="https://audaxer.com.br/cdn/shop/files/GUSTTA_5.jpg" referrerpolicy="no-referrer" alt="Audaxer hero">
+            <div class="shot-overlay">↗ Abrir site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — hero atleta tatuado</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://audaxer.com.br/collections/banheiras" target="_blank">
+          <div class="shot-preview" style="background:#0d0d0d">
+            <img src="https://audaxer.com.br/cdn/shop/files/GUSTTA-8_2.jpg" referrerpolicy="no-referrer" alt="Audaxer atleta">
+            <div class="shot-overlay">↗ Ver banheiras</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — Series X</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/audaxeroficial/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#0d0d0d,#1a1a1a)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#c5f135;letter-spacing:.1em">@audaxeroficial</div><div style="font-size:10px;color:#666;margin-top:4px">3.803 seguidores</div></div>
+            <div class="shot-overlay">↗ Ver perfil</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — perfil</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/audaxeroficial/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(160deg,#0a1500,#0d0d0d)">
+            <span style="font-size:24px">🥋</span><span style="font-size:10px;font-weight:700;color:#c5f135;letter-spacing:.12em;margin-left:8px;position:relative;z-index:2">ALLIANCE BJJ</span>
+            <div class="shot-overlay">↗ Ver collab</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — collab Alliance BJJ</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Dark industrial. Preto total com verde-limão agressivo. Atleta tatuado como hero. Fotografia editorial escura, contraste alto. Tipografia all-caps bold. Próximo ao universo de streetwear de performance e MMA.</div><div class="tags"><span class="tag">Dark industrial</span><span class="tag">Lime green</span><span class="tag">Streetwear</span></div></div>
+    <div class="a-card"><div class="a-title">Tom de Voz</div><div class="a-text">"CRUSH THE IMPOSSIBLE" — clichê de performance extrema. Fala de superação genérica. Linguagem de esportes de combate (BJJ, MMA). Sem nuança, sem ritual, sem camadas além da força bruta.</div><div class="tags"><span class="tag">Agressivo</span><span class="tag">Combat sports</span><span class="tag">Clichê</span></div></div>
+    <div class="a-card"><div class="a-title">Pontos Fracos</div><div class="a-text">3,8k no Instagram — base muito pequena. Visual extremamente masculino e restritivo. Portfólio sem narrativa coesa. Sem eventos, sem comunidade, sem experiência ao vivo.</div><div class="tags"><span class="tag">Audiência pequena</span><span class="tag">Masculino demais</span><span class="tag">Sem comunidade</span></div></div>
+  </div>
+  <div class="insight">
+    <div class="insight-label">Oportunidade Neurofood</div>
+    <div class="insight-text">Enquanto a Audaxer fala sobre <strong>ir além do limite</strong>, a Neurofood pode falar sobre <strong>criar corpo para sustentar essa jornada</strong>. Recovery não é fraqueza — é o que permite continuar. Uma narrativa mais inteligente, mais cultural e com muito mais espaço para crescer.</div>
+  </div>
+</section>
+
+<!-- ═══ MAX RECOVERY ═══ -->
+<section class="section" id="sec-maxrecovery">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://maxrecovery.com.br" target="_blank">↗ Site</a>
+    <a class="btn btn-green" href="https://www.instagram.com/maxrecovery/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge">Concorrente B2B</span>
+      <div class="brand-name">Max Recovery</div>
+      <div class="brand-tagline">"Optimizing Performance."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://maxrecovery.com.br" target="_blank">maxrecovery.com.br</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/maxrecovery/" target="_blank">@maxrecovery</a></span></div>
+        <div class="meta-row"><span class="meta-k">Modelo</span><span class="meta-v">B2B + loja virtual. Clubes, seleções, academias.</span></div>
+        <div class="meta-row"><span class="meta-k">Parceiros</span><span class="meta-v">COB, CBG, Hyperice, Game Ready, Normatec, BlazePod</span></div>
+        <div class="meta-row"><span class="meta-k">Nav</span><span class="meta-v">Produtos · Centros Recovery · Locação · Blog · Loja</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#c8001e"></div><span class="swatch-hex">#c8001e</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#1a1a1a;border-color:#333"></div><span class="swatch-hex">#1a1a1a</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#fff;border-color:#333"></div><span class="swatch-hex">#ffffff</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Prints — Site</span><a class="btn btn-ghost" href="https://maxrecovery.com.br" target="_blank" style="font-size:10px;padding:6px 12px">Abrir ao vivo ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://maxrecovery.com.br" target="_blank">
+          <div class="shot-preview">
+            <img src="https://i0.wp.com/maxrecovery.com.br/wp-content/uploads/2026/02/maxrecovery-1300x900-slide.jpg" referrerpolicy="no-referrer" alt="Max Recovery hero">
+            <div class="shot-overlay">↗ Abrir site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — hero institucional</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://maxrecovery.com.br" target="_blank">
+          <div class="shot-preview">
+            <img src="https://i0.wp.com/maxrecovery.com.br/wp-content/uploads/2023/07/maxrecovery-Gilad_Low_blazepod-slid-home.jpg" referrerpolicy="no-referrer" alt="Max Recovery atleta">
+            <div class="shot-overlay">↗ Ver atleta</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — atleta profissional</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://maxrecovery.com.br/centros-recovery" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a1a,#c8001e)">
+            <span style="font-size:32px;position:relative;z-index:2">🏆</span>
+            <div class="shot-overlay">↗ Ver centros B2B</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — Centros Recovery B2B</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://maxrecovery.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f5f5f5,#e0e0e0)">
+            <div style="text-align:center;line-height:2;position:relative;z-index:2">
+              <div style="font-size:9px;font-weight:700;color:#333;letter-spacing:.1em">GAME READY · HYPERICE</div>
+              <div style="font-size:9px;font-weight:700;color:#333;letter-spacing:.1em">NORMATEC · COB · CBG</div>
+            </div>
+            <div class="shot-overlay" style="color:#000">↗ Ver parceiros</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — parceiras internacionais</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Vermelho institucional + preto + branco. Muitos logos de parceiros e selos (COB, CBG). Visual sóbrio, técnico, sem glamour. Parece empresa de saúde corporativa, não marca de lifestyle.</div><div class="tags"><span class="tag">Institucional</span><span class="tag">B2B</span><span class="tag">Técnico</span></div></div>
+    <div class="a-card"><div class="a-title">Tom de Voz</div><div class="a-text">"Optimizing Performance" — vago e corporativo. Linguagem de empresa, não de marca. Fala com profissionais da saúde e gestores esportivos, não com o consumidor final que quer viver melhor.</div><div class="tags"><span class="tag">Corporativo</span><span class="tag">Profissional</span><span class="tag">Sem emoção</span></div></div>
+    <div class="a-card"><div class="a-title">Pontos Fracos</div><div class="a-text">Zero cultura de marca. Sem aspiração, sem lifestyle, sem comunidade. Depende completamente da autoridade dos parceiros internacionais. Sem identidade própria forte. UX sem experiência para o consumidor final.</div><div class="tags"><span class="tag">Sem cultura</span><span class="tag">Sem comunidade</span><span class="tag">Genérico</span></div></div>
+  </div>
+  <div class="insight">
+    <div class="insight-label">Oportunidade Neurofood</div>
+    <div class="insight-text">Max Recovery é tudo que a Neurofood não quer ser: institucional, sem alma e sem desejo. <strong>No B2B via Experience, a Neurofood pode entrar com muito mais desejo e identidade.</strong> A parceria com grandes marcas (Hyperice, Normatec) deles pode ser o roadmap de portfólio da Neurofood.</div>
+  </div>
+</section>
+
+<!-- ═══ RELAXMEDIC ═══ -->
+<section class="section" id="sec-relaxmedic">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://relaxmedic.com.br" target="_blank">↗ Site</a>
+    <a class="btn btn-green" href="https://www.instagram.com/relaxmedic_/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge">Concorrente indireto</span>
+      <div class="brand-name">RelaxMedic</div>
+      <div class="brand-tagline">"Invista em sua saúde e bem-estar."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://relaxmedic.com.br" target="_blank">relaxmedic.com.br</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/relaxmedic_/" target="_blank">@relaxmedic_</a></span></div>
+        <div class="meta-row"><span class="meta-k">Modelo</span><span class="meta-v">E-commerce amplo de saúde e bem-estar.</span></div>
+        <div class="meta-row"><span class="meta-k">Categorias</span><span class="meta-v">Massageador, Balança, Saúde, Suplementos, Beleza</span></div>
+        <div class="meta-row"><span class="meta-k">Promo</span><span class="meta-v">"Quanto mais você compra, mais você ganha"</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#1a3a6b"></div><span class="swatch-hex">#1a3a6b</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#1e6b3a"></div><span class="swatch-hex">#1e6b3a</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#ff6600"></div><span class="swatch-hex">#ff6600</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Prints — Site &amp; Instagram</span><a class="btn btn-ghost" href="https://relaxmedic.com.br" target="_blank" style="font-size:10px;padding:6px 12px">Abrir ao vivo ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://relaxmedic.com.br" target="_blank">
+          <div class="shot-preview">
+            <img src="https://relaxmedic.com.br/cdn/shop/files/Banner---Namorados-2026---Relaxmedic-_1080x900_2e474498-f3d4-486d-98b4-8e7c51772bea.png" referrerpolicy="no-referrer" alt="RelaxMedic">
+            <div class="shot-overlay">↗ Abrir site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — banner promoção</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://relaxmedic.com.br" target="_blank">
+          <div class="shot-preview">
+            <img src="https://relaxmedic.com.br/cdn/shop/files/Banner-Mixer-Brinde---Relaxmedic-_1080x900_5935a806-74c8-4e16-8c4f-9ad18dfe6b34.png" referrerpolicy="no-referrer" alt="RelaxMedic 2">
+            <div class="shot-overlay">↗ Ver mais</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — banner produto</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/relaxmedic_/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a2e,#1a3a6b)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.1em">@relaxmedic_</div><div style="font-size:10px;color:#888;margin-top:4px">Loja oficial</div></div>
+            <div class="shot-overlay">↗ Ver Instagram</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — perfil</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://relaxmedic.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#ff6600,#cc4400)">
+            <span style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.05em;text-align:center;padding:0 12px;position:relative;z-index:2">QUANTO MAIS<br>VOCÊ COMPRA,<br>MAIS VOCÊ GANHA</span>
+            <div class="shot-overlay">↗ Ver promoção</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — copy desconto ativo</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Azul navy + verde + laranja desconto. Visual de marketplace, não de marca. Banners de promoção dominam. Sem fotografia aspiracional. Parece uma Americanas do bem-estar doméstico.</div><div class="tags"><span class="tag">Marketplace</span><span class="tag">Desconto</span><span class="tag">Sem aspiração</span></div></div>
+    <div class="a-card"><div class="a-title">Tom de Voz</div><div class="a-text">Completamente orientado a preço e promoção. "Quanto mais você compra, mais você ganha." Sem narrativa, sem personagem, sem cultura. O desconto é o único argumento.</div><div class="tags"><span class="tag">Preço</span><span class="tag">Promoção</span><span class="tag">Sem narrativa</span></div></div>
+    <div class="a-card"><div class="a-title">Pontos Fracos</div><div class="a-text">Generalista demais para construir desejo em um produto específico. Cliente que compra por desconto sai por desconto. Sem posicionamento claro, sem comunidade, sem ritual.</div><div class="tags"><span class="tag">Sem posicionamento</span><span class="tag">Commoditizado</span><span class="tag">Sem fidelidade</span></div></div>
+  </div>
+  <div class="insight">
+    <div class="insight-label">Oportunidade Neurofood</div>
+    <div class="insight-text">RelaxMedic é o anti-posicionamento da Neurofood. Tudo que a Neurofood precisa evitar: desconto como argumento, sem cultura, sem ritual. <strong>O cliente que não compra a Neurofood por desconto, compra por identidade e pertencimento</strong> — e esse é o cliente que fica.</div>
+  </div>
+</section>
+
+<!-- ═══ AVA ═══ -->
+<section class="section" id="sec-ava">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://avanutri.com.br" target="_blank">↗ Site</a>
+    <a class="btn btn-green" href="https://www.instagram.com/avanutri_ava/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge">Concorrente técnico</span>
+      <div class="brand-name">AVA</div>
+      <div class="brand-tagline">"Advanced Recovery for elite athletes."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://avanutri.com.br" target="_blank">avanutri.com.br</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/avanutri_ava/" target="_blank">@avanutri_ava</a></span></div>
+        <div class="meta-row"><span class="meta-k">Modelo</span><span class="meta-v">B2B institucional. Seleções, federações, atletas de elite.</span></div>
+        <div class="meta-row"><span class="meta-k">Visual</span><span class="meta-v">Estética bege-clean, tipografia leve, tons neutros.</span></div>
+        <div class="meta-row"><span class="meta-k">Foco</span><span class="meta-v">Autoridade técnica, ciência aplicada, elite esportiva.</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#3d3d3d"></div><span class="swatch-hex">#3d3d3d</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#3dbfa0"></div><span class="swatch-hex">#3dbfa0</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#f0ebe0;border-color:#999"></div><span class="swatch-hex">#f0ebe0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Prints — Site &amp; Instagram</span><a class="btn btn-ghost" href="https://avanutri.com.br" target="_blank" style="font-size:10px;padding:6px 12px">Abrir ao vivo ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://avanutri.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(145deg,#ddd,#ebebeb,#d0d0d0)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:38px;font-weight:200;color:#2a2a2a;letter-spacing:.5em">AVA</div><div style="font-size:9px;font-weight:600;color:#3dbfa0;letter-spacing:.2em;margin-top:8px">ADVANCED RECOVERY</div></div>
+            <div class="shot-overlay" style="color:#111">↗ Abrir site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — visual institucional</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://avanutri.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#3d3d3d,#2a2a2a)">
+            <div style="text-align:center;line-height:2;position:relative;z-index:2"><div style="font-size:9px;font-weight:600;color:#aaa;letter-spacing:.1em">SELEÇÕES · FEDERAÇÕES</div><div style="font-size:9px;font-weight:600;color:#3dbfa0;letter-spacing:.1em">ATLETAS DE ELITE</div></div>
+            <div class="shot-overlay">↗ Ver autoridade</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — parcerias elite</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/avanutri_ava/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a1a,#2a2a2a)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#3dbfa0;letter-spacing:.1em">@avanutri_ava</div><div style="font-size:10px;color:#666;margin-top:4px">Conta oficial</div></div>
+            <div class="shot-overlay">↗ Ver Instagram</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — perfil</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://avanutri.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f0ebe0,#e5ddd0)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:9px;font-weight:600;color:#555;letter-spacing:.15em">NUTRIÇÃO · RECOVERY</div><div style="font-size:9px;font-weight:600;color:#3dbfa0;letter-spacing:.1em;margin-top:4px">CIÊNCIA APLICADA</div></div>
+            <div class="shot-overlay" style="color:#111">↗ Ver produtos</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — posicionamento técnico</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Bege-clean, cinza escuro, verde teal suave. Visual minimalista escandinavo, muito técnico-institucional. Evoca confiança científica mas sem calor, sem desejo e sem cultura de marca.</div><div class="tags"><span class="tag">Bege clean</span><span class="tag">Minimalista</span><span class="tag">Institucional</span></div></div>
+    <div class="a-card"><div class="a-title">Tom de Voz</div><div class="a-text">Técnico e sóbrio. Fala com o profissional de saúde e o atleta de elite, não com o público amplo. Autoridade como diferencial. Sem emoção, sem pertencimento, sem narrativa inspiradora.</div><div class="tags"><span class="tag">Técnico</span><span class="tag">Elite</span><span class="tag">Sóbrio</span></div></div>
+    <div class="a-card"><div class="a-title">Pontos Fracos</div><div class="a-text">Visualmente frio e sem desejo. A estética bege-institucional não gera aspiração. Dificuldade de expansão para o consumidor final. Site com pouca usabilidade orientada ao D2C.</div><div class="tags"><span class="tag">Sem desejo</span><span class="tag">Frio</span><span class="tag">Difícil expansão</span></div></div>
+  </div>
+  <div class="insight">
+    <div class="insight-label">Oportunidade Neurofood</div>
+    <div class="insight-text">AVA tem autoridade técnica mas zero calor. A Neurofood pode ter os dois: ciência com credibilidade <strong>e</strong> cultura com desejo. O consumidor final não quer comprar num laboratório — quer comprar numa marca em que se enxerga.</div>
+  </div>
+</section>
+
+<!-- ═══ GO ARCTIC ═══ -->
+<section class="section" id="sec-goarctic">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://goarctic.com.br" target="_blank">↗ Site</a>
+    <a class="btn btn-green" href="https://www.instagram.com/goarcticbr/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge">Concorrente preço</span>
+      <div class="brand-name">Go Arctic</div>
+      <div class="brand-tagline">"A recuperação que você precisa, ao preço que cabe no bolso."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://goarctic.com.br" target="_blank">goarctic.com.br</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/goarcticbr/" target="_blank">@goarcticbr</a></span></div>
+        <div class="meta-row"><span class="meta-k">Modelo</span><span class="meta-v">D2C com foco em volume e preço.</span></div>
+        <div class="meta-row"><span class="meta-k">Paleta</span><span class="meta-v">Dark navy + roxo. Estética genérica de e-commerce.</span></div>
+        <div class="meta-row"><span class="meta-k">Principal</span><span class="meta-v">Argumento de preço. Desconto como call-to-action principal.</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#1a1a2e;border-color:#333"></div><span class="swatch-hex">#1a1a2e</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#7c3aed"></div><span class="swatch-hex">#7c3aed</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#fff;border-color:#333"></div><span class="swatch-hex">#ffffff</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Prints — Site &amp; Instagram</span><a class="btn btn-ghost" href="https://goarctic.com.br" target="_blank" style="font-size:10px;padding:6px 12px">Abrir ao vivo ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://goarctic.com.br" target="_blank">
+          <div class="shot-preview">
+            <img src="https://goarctic.com.br/cdn/shop/files/novo_banner.png" referrerpolicy="no-referrer" alt="Go Arctic banner">
+            <div class="shot-overlay">↗ Abrir site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — banner principal</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://goarctic.com.br" target="_blank">
+          <div class="shot-preview">
+            <img src="https://goarctic.com.br/cdn/shop/files/foto_melhorada.png" referrerpolicy="no-referrer" alt="Go Arctic produto">
+            <div class="shot-overlay">↗ Ver produto</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — produto</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/goarcticbr/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a2e,#2d1a5e)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em">@goarcticbr</div><div style="font-size:10px;color:#666;margin-top:4px">Conta oficial</div></div>
+            <div class="shot-overlay">↗ Ver Instagram</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — perfil</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://goarctic.com.br" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#7c3aed,#4a1a8a)">
+            <span style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.05em;text-align:center;padding:0 12px;position:relative;z-index:2">DESCONTO<br>ESPECIAL 🧊</span>
+            <div class="shot-overlay">↗ Ver oferta</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — copy desconto</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Dark navy + roxo genérico. Estética de e-commerce de dropshipping sem identidade própria. Não há fotografia aspiracional, não há estilo visual distinto. Poderia ser qualquer produto.</div><div class="tags"><span class="tag">Genérico</span><span class="tag">Dark navy</span><span class="tag">Roxo</span></div></div>
+    <div class="a-card"><div class="a-title">Tom de Voz</div><div class="a-text">Conversão pura. Preço como único argumento. "A recuperação que você precisa" é uma frase vaga e sem personalidade. Sem manifesto, sem cultura, sem ritual — apenas desconto.</div><div class="tags"><span class="tag">Preço</span><span class="tag">Volume</span><span class="tag">Sem personalidade</span></div></div>
+    <div class="a-card"><div class="a-title">Pontos Fracos</div><div class="a-text">Sem diferencial além de preço. Sem comunidade. Sem marca. Extremamente vulnerável a qualquer concorrente com mais margem ou mais cultura. Cliente não tem fidelidade, apenas oportunismo de preço.</div><div class="tags"><span class="tag">Sem diferencial</span><span class="tag">Sem fidelidade</span><span class="tag">Vulnerável</span></div></div>
+  </div>
+  <div class="insight">
+    <div class="insight-label">Oportunidade Neurofood</div>
+    <div class="insight-text">Go Arctic compete em preço — o único campo onde a Neurofood não quer entrar. A existência de Go Arctic prova que há demanda por recovery acessível, mas <strong>o cliente que a Neurofood quer não compra pelo menor preço: compra pelo maior significado</strong>.</div>
+  </div>
+</section>
+
+<!-- ═══ THERABODY ═══ -->
+<section class="section" id="sec-therabody">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://www.therabody.com" target="_blank">↗ Site</a>
+    <a class="btn btn-gold" href="https://www.instagram.com/therabody/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge global">Benchmark Global</span>
+      <div class="brand-name">Therabody</div>
+      <div class="brand-tagline">"Move Better. Live Better. Feel Better."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://www.therabody.com" target="_blank">therabody.com</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/therabody/" target="_blank">@therabody</a> · 1,5M+</span></div>
+        <div class="meta-row"><span class="meta-k">Bio</span><span class="meta-v">The science of feeling better. Percussive therapy, compression, heat &amp; cold.</span></div>
+        <div class="meta-row"><span class="meta-k">Produtos</span><span class="meta-v">Theragun PRO, Wave roller, RecoveryAir (NormaTec), PowerBelt, Theraface</span></div>
+        <div class="meta-row"><span class="meta-k">Parcerias</span><span class="meta-v">NBA, NFL, MLB, cirurgiões, fisioterapeutas globais</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#ffffff;border-color:#444"></div><span class="swatch-hex">#ffffff</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#000000;border-color:#333"></div><span class="swatch-hex">#000000</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#e8e4e0;border-color:#999"></div><span class="swatch-hex">#e8e4e0</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#d4001a"></div><span class="swatch-hex">#d4001a</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Referências visuais</span><a class="btn btn-ghost" href="https://www.instagram.com/therabody/" target="_blank" style="font-size:10px;padding:6px 12px">Ver Instagram ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://www.therabody.com" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#fff,#f0ede8)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:18px;font-weight:900;color:#000;letter-spacing:-.01em">THERABODY</div><div style="font-size:9px;font-weight:500;color:#666;letter-spacing:.15em;margin-top:6px;text-transform:uppercase">The Science of Recovery</div></div>
+            <div class="shot-overlay" style="color:#111">↗ Ver site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — hero ultra-clean (branco)</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.therabody.com/collections/theragun" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a1a,#000)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.05em">THERAGUN PRO</div><div style="font-size:9px;color:#888;margin-top:4px;letter-spacing:.1em">PERCUSSIVE THERAPY</div></div>
+            <div class="shot-overlay">↗ Ver Theragun</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — produto hero</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/therabody/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.1em">@therabody</div><div style="font-size:10px;color:#888;margin-top:4px">1,5M+ seguidores</div><div style="font-size:9px;color:#d4001a;margin-top:4px;font-weight:700;letter-spacing:.1em">NBA · NFL · OLIMPÍADAS</div></div>
+            <div class="shot-overlay">↗ Ver Instagram</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — parcerias atletas elite</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.therabody.com/collections/compression" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f5f5f5,#e8e8e8)">
+            <div style="text-align:center;line-height:1.8;position:relative;z-index:2">
+              <div style="font-size:9px;font-weight:700;color:#333;letter-spacing:.15em">RECOVERYA IR</div>
+              <div style="font-size:9px;font-weight:700;color:#555;letter-spacing:.1em">COMPRESSION · HEAT</div>
+              <div style="font-size:9px;font-weight:700;color:#555;letter-spacing:.1em">COLD · PERCUSSION</div>
+            </div>
+            <div class="shot-overlay" style="color:#111">↗ Ver portfólio</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — ecossistema completo</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Ultra-clean. Branco como base dominante, produto em destaque máximo. Fotografia de precisão cirúrgica, sem ruído. Quando usa humano, é atleta de elite em contexto de movimento real. Referência máxima em fotografa de produto no segmento.</div><div class="tags"><span class="tag gold">Fotografia premium</span><span class="tag gold">Ultra-clean</span><span class="tag gold">Produto hero</span></div></div>
+    <div class="a-card"><div class="a-title">Posicionamento</div><div class="a-text">"The science of feeling better." Ciência como argumento central — não biohacking, não lifestyle, mas evidência clínica. Parcerias com NBA, NFL, cirurgiões e fisioterapeutas como prova social máxima. Confiança acima de aspiração.</div><div class="tags"><span class="tag gold">Science-backed</span><span class="tag gold">Parcerias atletas</span><span class="tag gold">Credibilidade clínica</span></div></div>
+    <div class="a-card"><div class="a-title">Lição para Neurofood</div><div class="a-text"><strong style="color:#ffc800">Fotografia é estratégia.</strong> O nível visual da Therabody faz o produto parecer valer 3x mais. A Neurofood precisa investir em fotografia de produto + pessoa de alto nível como alavanca de valor percebido, não como detalhe estético.</div><div class="tags"><span class="tag green">Aplicar: Foto de produto</span><span class="tag green">Aplicar: Parcerias atletas BR</span></div></div>
+  </div>
+  <div class="insight gold-insight">
+    <div class="insight-label">Lição Estratégica para Neurofood</div>
+    <div class="insight-text">A Therabody construiu a categoria de "recovery tech" com ciência e parcerias. A Neurofood não precisa reinventar a roda — precisa <strong>construir para o Brasil</strong> o que a Therabody construiu globalmente: autoridade científica + desejo de marca + ecossistema de produtos. A diferença: a Neurofood pode ter cultura e ritual, o que a Therabody não tem.</div>
+  </div>
+</section>
+
+<!-- ═══ HYPERICE ═══ -->
+<section class="section" id="sec-hyperice">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://hyperice.com" target="_blank">↗ Site</a>
+    <a class="btn btn-gold" href="https://www.instagram.com/hyperice/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge global">Benchmark Global</span>
+      <div class="brand-name">Hyperice</div>
+      <div class="brand-tagline">"Be Ready for Anything."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://hyperice.com" target="_blank">hyperice.com</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/hyperice/" target="_blank">@hyperice</a> · 750k+</span></div>
+        <div class="meta-row"><span class="meta-k">Bio</span><span class="meta-v">The official recovery technology partner of the NBA, NFL, MLB, PGA, NHL &amp; more.</span></div>
+        <div class="meta-row"><span class="meta-k">Produtos</span><span class="meta-v">Hypervolt (massagem), Normatec (compressão), Venom (calor), Vyper (rolo vibratório)</span></div>
+        <div class="meta-row"><span class="meta-k">Referência</span><span class="meta-v"><a href="https://hyperice.com/collections/vyper-hypersphere" target="_blank">hyperice.com/collections/vyper-hypersphere</a></span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#0a0a0a;border-color:#333"></div><span class="swatch-hex">#0a0a0a</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#ff6b00"></div><span class="swatch-hex">#ff6b00</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#ffffff;border-color:#333"></div><span class="swatch-hex">#ffffff</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Referências visuais</span><a class="btn btn-ghost" href="https://www.instagram.com/hyperice/" target="_blank" style="font-size:10px;padding:6px 12px">Ver Instagram ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://hyperice.com" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:.05em">HYPERICE</div><div style="font-size:9px;font-weight:700;color:#ff6b00;letter-spacing:.2em;margin-top:6px;text-transform:uppercase">Be Ready for Anything</div></div>
+            <div class="shot-overlay">↗ Ver site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — hero dark premium</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://hyperice.com/collections/vyper-hypersphere" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a0a00,#0a0a0a)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:12px;font-weight:800;color:#ff6b00;letter-spacing:.1em">HYPERVOLT</div><div style="font-size:10px;color:#888;margin-top:4px;letter-spacing:.1em">PERCUSSION DEVICE</div></div>
+            <div class="shot-overlay">↗ Ver Hypervolt</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — produto hero Hypervolt</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/hyperice/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.1em">@hyperice</div><div style="font-size:10px;color:#888;margin-top:4px">750k+ seguidores</div><div style="font-size:9px;color:#ff6b00;margin-top:4px;font-weight:700;letter-spacing:.1em">NBA · NFL · MLB · PGA</div></div>
+            <div class="shot-overlay">↗ Ver Instagram</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — parcerias ligas globais</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://hyperice.com/collections/normatec" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#0a0a0a,#200a00)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#ff6b00;letter-spacing:.1em">NORMATEC</div><div style="font-size:9px;color:#888;margin-top:4px;letter-spacing:.08em">COMPRESSION BOOTS</div></div>
+            <div class="shot-overlay">↗ Ver Normatec</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — botas de compressão</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Preto total, laranja de energia, fotografia high-contrast com atletas em ação. Visual agressivo mas premium — combina performance extrema com tecnologia sofisticada. Dark como a Audaxer mas executado em nível totalmente diferente.</div><div class="tags"><span class="tag gold">Dark premium</span><span class="tag gold">Alta energia</span><span class="tag gold">Atleta em ação</span></div></div>
+    <div class="a-card"><div class="a-title">Posicionamento</div><div class="a-text">"Be Ready for Anything." Positioning de readiness, não de recovery passiva. Parceiros oficiais da NBA, NFL, MLB, PGA, NHL — o catálogo mais impressionante de ligas esportivas do setor. Recovery como tecnologia de atletas de elite.</div><div class="tags"><span class="tag gold">Official partner</span><span class="tag gold">Readiness</span><span class="tag gold">Elite sport</span></div></div>
+    <div class="a-card"><div class="a-title">Lição para Neurofood</div><div class="a-text"><strong style="color:#ffc800">Parceria como autoridade.</strong> A Hyperice construiu sua credibilidade através de quem usa, não de quem vende. A Neurofood precisa de atletas, influenciadores e fundadores visíveis usando o produto em contexto real — antes de falar de ciência ou preço.</div><div class="tags"><span class="tag green">Aplicar: Atletas embaixadores BR</span><span class="tag green">Aplicar: Conteúdo de uso real</span></div></div>
+  </div>
+  <div class="insight gold-insight">
+    <div class="insight-label">Lição Estratégica para Neurofood</div>
+    <div class="insight-text">A Hyperice é o que a Neurofood pode se tornar no Brasil em 5 anos, mas com uma vantagem: a Hyperice é americana e fria. A Neurofood pode ter o mesmo nível de performance e parceria atlética, com <strong>calor brasileiro, ritual e cultura própria</strong>. "Hyperice com alma" é um brief possível.</div>
+  </div>
+</section>
+
+<!-- ═══ HIGHERDOSE ═══ -->
+<section class="section" id="sec-higherdose">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://higherdose.com" target="_blank">↗ Site</a>
+    <a class="btn btn-gold" href="https://www.instagram.com/higherdose/" target="_blank">↗ Instagram</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge global">Benchmark Global</span>
+      <div class="brand-name">HigherDOSE</div>
+      <div class="brand-tagline">"Biohack Your Bliss."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://higherdose.com" target="_blank">higherdose.com</a></span></div>
+        <div class="meta-row"><span class="meta-k">Instagram</span><span class="meta-v"><a href="https://www.instagram.com/higherdose/" target="_blank">@higherdose</a> · 400k+</span></div>
+        <div class="meta-row"><span class="meta-k">Bio</span><span class="meta-v">Infrared Sauna Blanket · PEMF Go Mat · Red Light Face Mask</span></div>
+        <div class="meta-row"><span class="meta-k">Produtos</span><span class="meta-v">Sauna Blanket, PEMF Mat, Red Light Mask, Starter Kit</span></div>
+        <div class="meta-row"><span class="meta-k">Território</span><span class="meta-v">Luxury wellness. Recovery como ritual sensorial e aspiracional.</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#f9a8b0"></div><span class="swatch-hex">#f9a8b0</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#f5f0ea;border-color:#ccc"></div><span class="swatch-hex">#f5f0ea</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#c8a87a"></div><span class="swatch-hex">#c8a87a</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#2a1a1a;border-color:#444"></div><span class="swatch-hex">#2a1a1a</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Referências visuais</span><a class="btn btn-ghost" href="https://higherdose.com" target="_blank" style="font-size:10px;padding:6px 12px">Ver site ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://higherdose.com" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f9a8b0,#f0d0d0,#f5f0ea)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:14px;font-weight:900;color:#2a1a1a;letter-spacing:.05em">HIGHERDOSE</div><div style="font-size:9px;font-weight:600;color:#c8a87a;letter-spacing:.2em;margin-top:6px">BIOHACK YOUR BLISS</div></div>
+            <div class="shot-overlay" style="color:#111">↗ Ver site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — hero rose/cream luxury</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://higherdose.com/products/infrared-sauna-blanket" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#2a1a1a,#1a0a00)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#f9a8b0;letter-spacing:.08em">INFRARED</div><div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em;margin-top:2px">SAUNA BLANKET</div><div style="font-size:9px;color:#c8a87a;margin-top:4px;letter-spacing:.1em">RITUAL DE CALOR</div></div>
+            <div class="shot-overlay">↗ Ver sauna blanket</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — produto ritual de calor</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://www.instagram.com/higherdose/" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f5e8e8,#f9d0d8)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:11px;font-weight:700;color:#2a1a1a;letter-spacing:.1em">@higherdose</div><div style="font-size:10px;color:#888;margin-top:4px">400k+ seguidores</div><div style="font-size:9px;color:#c8a87a;margin-top:4px;font-weight:700;letter-spacing:.1em">LUXURY WELLNESS</div></div>
+            <div class="shot-overlay" style="color:#111">↗ Ver Instagram</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Instagram — estética rose aspiracional</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://higherdose.com/products/pemf-go-mat" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f9f0e8,#edddd0)">
+            <div style="text-align:center;line-height:1.8;position:relative;z-index:2">
+              <div style="font-size:9px;font-weight:700;color:#c8a87a;letter-spacing:.15em">SAUNA BLANKET</div>
+              <div style="font-size:9px;font-weight:700;color:#666;letter-spacing:.12em">PEMF MAT</div>
+              <div style="font-size:9px;font-weight:700;color:#666;letter-spacing:.12em">RED LIGHT MASK</div>
+            </div>
+            <div class="shot-overlay" style="color:#111">↗ Ver portfólio ritual</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — ecossistema de rituais</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Identidade Visual</div><div class="a-text">Rosa, creme, dourado e dark quente. Luxury wellness sem deixar de ser inteligente. Fotografia sensorial: pele, luz, vapor, textura. Mulher em ritual privado de autocuidado. A marca mais "desejável" do setor globalmente.</div><div class="tags"><span class="tag gold">Luxury wellness</span><span class="tag gold">Sensorial</span><span class="tag gold">Aspiracional feminino</span></div></div>
+    <div class="a-card"><div class="a-title">Posicionamento</div><div class="a-text">"Biohack Your Bliss." Biohacking como prazer, não como obrigação técnica. Recuperação como luxo e ritual. Criaram o segmento de "sauna blanket" do zero e dominam. Preço premium sem desculpas.</div><div class="tags"><span class="tag gold">Ritual de prazer</span><span class="tag gold">Luxury wellness</span><span class="tag gold">Category creator</span></div></div>
+    <div class="a-card"><div class="a-title">Lição para Neurofood</div><div class="a-text"><strong style="color:#ffc800">Ritual + sensorialidade = categoria própria.</strong> A HigherDOSE não vendeu sauna — vendeu o prazer de ter uma sauna em casa. A Neurofood precisa vender não a banheira, mas o ritual do gelo e do calor como parte de uma vida que vale a pena. Fotografia sensorial (pele, vapor, luz, corpo) é o caminho.</div><div class="tags"><span class="tag green">Aplicar: Foto sensorial</span><span class="tag green">Aplicar: Ritual narrativa</span><span class="tag green">Aplicar: Sauna blanket</span></div></div>
+  </div>
+  <div class="insight gold-insight">
+    <div class="insight-label">Lição Estratégica — Referência Principal</div>
+    <div class="insight-text">HigherDOSE é a referência mais próxima do que a Neurofood pode se tornar — com adaptação cultural. Trocar o rose pelo verde preto, o feminino pelo híbrido, o luxo californiano pela energia brasileira. <strong>A lógica é a mesma: ritual, sensação real, desejo, produto como experiência.</strong> O "HigherDOSE brasileiro" está disponível.</div>
+  </div>
+</section>
+
+<!-- ═══ CADENCE ═══ -->
+<section class="section" id="sec-cadence">
+  <div class="section-actions">
+    <a class="btn btn-ghost" href="https://usecadence.com" target="_blank">↗ Site</a>
+    <a class="btn btn-gold" href="https://usecadence.com" target="_blank">↗ Ver marca</a>
+  </div>
+  <div class="brand-hero">
+    <div class="brand-id-card">
+      <span class="brand-badge global">Benchmark de Branding</span>
+      <div class="brand-name">Cadence</div>
+      <div class="brand-tagline">"Your most dependable travel companion."</div>
+      <div class="meta-list">
+        <div class="meta-row"><span class="meta-k">Site</span><span class="meta-v"><a href="https://usecadence.com" target="_blank">usecadence.com</a></span></div>
+        <div class="meta-row"><span class="meta-k">Produto</span><span class="meta-v">Sistema modular de cápsulas de viagem. Organização de rotina.</span></div>
+        <div class="meta-row"><span class="meta-k">Por que</span><span class="meta-v">Referência de como transformar produto funcional em ritual de lifestyle.</span></div>
+        <div class="meta-row"><span class="meta-k">Território</span><span class="meta-v">Rotina organizada, praticidade com design, viagem como ritual.</span></div>
+        <div class="meta-row"><span class="meta-k">Lição</span><span class="meta-v">Produto utilitário → objeto de desejo através de branding.</span></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Paleta visual</div>
+        <div class="palette">
+          <div class="swatch"><div class="swatch-dot" style="background:#ffffff;border-color:#ddd"></div><span class="swatch-hex">#ffffff</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#1a1a1a;border-color:#333"></div><span class="swatch-hex">#1a1a1a</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#4a90d9"></div><span class="swatch-hex">colorful</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#52b87a"></div><span class="swatch-hex">modular</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshots-panel">
+      <div class="panel-hdr"><span class="panel-hdr-title">Referências visuais</span><a class="btn btn-ghost" href="https://usecadence.com" target="_blank" style="font-size:10px;padding:6px 12px">Ver site ↗</a></div>
+      <div class="screenshots-grid">
+        <a class="shot-card" href="https://usecadence.com" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#f8f8f8,#ffffff)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:16px;font-weight:900;color:#1a1a1a;letter-spacing:.1em">CADENCE</div><div style="font-size:9px;font-weight:600;color:#888;letter-spacing:.2em;margin-top:6px">MODULAR TRAVEL SYSTEM</div></div>
+            <div class="shot-overlay" style="color:#111">↗ Ver site</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — design ultra-clean</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://usecadence.com" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#e8f4e8,#d0ecd0)">
+            <div style="display:flex;gap:6px;position:relative;z-index:2">
+              <div style="width:28px;height:28px;background:#4a90d9;border-radius:6px"></div>
+              <div style="width:28px;height:28px;background:#52b87a;border-radius:6px"></div>
+              <div style="width:28px;height:28px;background:#e87a4a;border-radius:6px"></div>
+              <div style="width:28px;height:28px;background:#9a4ad9;border-radius:6px"></div>
+            </div>
+            <div class="shot-overlay" style="color:#111">↗ Ver modular</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Site — sistema modular colorido</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://usecadence.com" target="_blank">
+          <div class="shot-preview" style="background:#fff">
+            <div style="text-align:center;line-height:1.8;position:relative;z-index:2">
+              <div style="font-size:11px;font-weight:700;color:#333;letter-spacing:.05em">Produto funcional</div>
+              <div style="font-size:20px;margin:4px 0">↓</div>
+              <div style="font-size:11px;font-weight:800;color:#1a1a1a;letter-spacing:.05em">Objeto de desejo</div>
+            </div>
+            <div class="shot-overlay" style="color:#111">↗ Ver a transformação</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Lição central da marca</span><span class="shot-arrow">↗</span></div>
+        </a>
+        <a class="shot-card" href="https://usecadence.com" target="_blank">
+          <div class="shot-preview" style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d)">
+            <div style="text-align:center;position:relative;z-index:2"><div style="font-size:12px;font-weight:700;color:#fff;letter-spacing:.05em">RITUAL DE ROTINA</div><div style="font-size:10px;color:#888;margin-top:4px">Design como estratégia</div></div>
+            <div class="shot-overlay">↗ Ver abordagem</div>
+          </div>
+          <div class="shot-footer"><span class="shot-label">Insight — rotina como ritual</span><span class="shot-arrow">↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="analysis-grid">
+    <div class="a-card"><div class="a-title">Por que é referência</div><div class="a-text">A Cadence vende porta-cosméticos de viagem — o produto mais prosaico imaginável. E conseguiu transformá-lo em objeto de desejo, com comunidade, conteúdo, design premium e identidade forte. Prova que qualquer produto funcional pode virar lifestyle com branding certo.</div><div class="tags"><span class="tag gold">Produto utilitário → desejo</span><span class="tag gold">Design = estratégia</span></div></div>
+    <div class="a-card"><div class="a-title">O que fazem bem</div><div class="a-text">Sistema modular. Cores que comunicam personalidade. Site que ensina como usar. Comunidade que compartilha "meu kit". Fotografia de estilo de vida, não de catálogo. Rotina como identidade — "eu sou uma pessoa que se cuida".</div><div class="tags"><span class="tag gold">Lifestyle identity</span><span class="tag gold">Sistema modular</span><span class="tag gold">Comunidade</span></div></div>
+    <div class="a-card"><div class="a-title">Lição para Neurofood</div><div class="a-text"><strong style="color:#ffc800">Se a Cadence fez isso com cápsulas de shampoo, a Neurofood pode fazer com gelo e calor.</strong> O produto não limita o branding — o branding transforma o produto. Kits modulares de ritual, fotografia de estilo de vida, identidade "eu sou uma pessoa que se recupera" são todos caminhos.</div><div class="tags"><span class="tag green">Aplicar: Kit de ritual</span><span class="tag green">Aplicar: Identidade lifestyle</span></div></div>
+  </div>
+  <div class="insight gold-insight">
+    <div class="insight-label">A Lição mais importante</div>
+    <div class="insight-text">A Cadence prova que <strong>o produto não precisa ser sexy para a marca ser desejável</strong>. A banheira de gelo e a sauna portátil são ferramentas — o que a Neurofood precisa construir é o ritual, a identidade e a comunidade em torno delas. "Eu faço parte de quem se importa com o próprio corpo" — essa é a compra real.</div>
+  </div>
+</section>
+
+<!-- ═══ NEUROFOOD ESTRATÉGIA ═══ -->
+<section class="section" id="sec-neurofood">
+  <div class="sec-hdr">
+    <div class="sec-eyebrow" style="color:var(--green)">🧠 Estratégia de Marca</div>
+    <div class="sec-title">Neurofood</div>
+    <div class="sec-body">O repositório estratégico da marca — manifesto, pilares, personas e oportunidades. Use como bússola para decisões de comunicação, produto e experiência.</div>
+  </div>
+
+  <!-- Manifesto -->
+  <div class="manifesto-block">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin-bottom:16px">Manifesto</div>
+    <div class="manifesto-text">
+      A gente foi ensinado a <strong>fugir do desconforto.</strong><br><br>
+      Mas existe uma tribo de pessoas que entendeu algo diferente.<br><br>
+      <strong>— Que recuperar também faz parte do treino.</strong><br>
+      <strong>— Que consistência bate qualquer hack.</strong><br>
+      <strong>— Que pra viver melhor, é preciso estar atento ao próprio corpo.</strong><br><br>
+      A Neurofood existe para transformar a relação dos brasileiros com o desconforto.<br>
+      — Criando produtos, rituais e experiências para quem treina, vive e se desafia.<br><br>
+      Isso, pra gente, é a dopamina de verdade. Essa é a nossa bandeira.
+    </div>
+    <div class="manifesto-cta">O crescimento começa no desconforto.</div>
+    <div style="margin-top:8px;font-size:14px;font-weight:700;color:rgba(82,194,85,.7)">Anti performance, performance club.</div>
+    <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px">
+      <span style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(82,194,85,.6);border:1px solid rgba(82,194,85,.2);border-radius:4px;padding:4px 10px">Recuperar melhor para viver mais forte.</span>
+      <span style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(82,194,85,.6);border:1px solid rgba(82,194,85,.2);border-radius:4px;padding:4px 10px">Make healthy cool again.</span>
+    </div>
+  </div>
+
+  <!-- Brand Purpose / Golden Circle -->
+  <div style="font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin-bottom:16px">Proposta de Valor</div>
+  <div class="a-card" style="margin-bottom:24px;border-left:3px solid var(--green)">
+    <div class="a-title">Brand Purpose</div>
+    <div class="a-text" style="font-size:14px;color:rgba(255,255,255,.85);line-height:1.7">A Neurofood ajuda <strong>atletas híbridos e pessoas em movimento</strong> a transformarem recovery, performance e longevidade intencional em <strong>rituais práticos para viver melhor</strong>, recuperar mais forte e sustentar uma rotina com mais energia.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px">
+      <div style="background:var(--card2);border-radius:8px;padding:14px;border:1px solid var(--border2)">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:6px">Por quê</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.5">O corpo é o ponto de partida para tudo que importa. Cuidar dele com intenção é a forma mais eficiente de viver melhor.</div>
+      </div>
+      <div style="background:var(--card2);border-radius:8px;padding:14px;border:1px solid var(--border2)">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:6px">Como</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.5">Através do conforto no desconforto. Transformamos frio, calor, pausa e respiração em rituais práticos para atletas híbridos e pessoas comuns.</div>
+      </div>
+      <div style="background:var(--card2);border-radius:8px;padding:14px;border:1px solid var(--border2)">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:6px">O quê</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.5">Produtos, conteúdos e experiências de recovery para uma rotina de bem-estar e longevidade intencional.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 Territórios -->
+  <div style="font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin-bottom:16px">4 Territórios de Marca</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;border-top:3px solid var(--green)">
+      <div style="font-size:11px;font-weight:800;color:#fff;margin-bottom:6px">Performance do dia a dia</div>
+      <div style="font-size:11px;color:var(--gray-light);line-height:1.5">Pessoas reais que treinam, trabalham, socializam e buscam mais energia, consistência e controle sobre a própria rotina.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;border-top:3px solid var(--green)">
+      <div style="font-size:11px;font-weight:800;color:#fff;margin-bottom:6px">Cultura do Recovery</div>
+      <div style="font-size:11px;color:var(--gray-light);line-height:1.5">Recuperação como comportamento cultural — um ritual desejável, compartilhável e aspiracional para quem leva o corpo a sério.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;border-top:3px solid var(--green)">
+      <div style="font-size:11px;font-weight:800;color:#fff;margin-bottom:6px">Corpo, Sensação e Presença</div>
+      <div style="font-size:11px;color:var(--gray-light);line-height:1.5">Em um mundo hiperestimulado, a Neurofood devolve o corpo para o centro — usando frio, calor, respiração e pausa para sentir, focar e regular.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;border-top:3px solid var(--green)">
+      <div style="font-size:11px;font-weight:800;color:#fff;margin-bottom:6px">Longevidade Intencional</div>
+      <div style="font-size:11px;color:var(--gray-light);line-height:1.5">Produtos, experiências e conteúdos que ajudam pessoas ativas a viverem mais e melhor, com ciência e praticidade.</div>
+    </div>
+  </div>
+
+  <!-- O que não somos -->
+  <div style="font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:#555;margin-bottom:16px">Territórios que não assumiremos como bandeira</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;border-left:3px solid #333">
+      <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:6px;text-decoration:line-through">Marca de Biohacking</div>
+      <div style="font-size:11px;color:#444;line-height:1.5">Pode aparecer como repertório ou linguagem secundária, mas não como bandeira. A Neurofood é mais corpo, ritual e básico bem feito do que clichê biohacker.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;border-left:3px solid #333">
+      <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:6px;text-decoration:line-through">Marca Genérica de Wellness</div>
+      <div style="font-size:11px;color:#444;line-height:1.5">Wellness é amplo demais. A Neurofood tem mais corpo, suor, gelo, vapor, movimento e vida real do que o universo tradicional de bem-estar.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;border-left:3px solid #333">
+      <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:6px;text-decoration:line-through">Apenas uma Marca de Recovery</div>
+      <div style="font-size:11px;color:#444;line-height:1.5">Recovery é parte central da entrega, mas sozinho reduz a marca à função. A Neurofood quer ser cultura, ritual, identidade e estilo de vida.</div>
+    </div>
+  </div>
+
+  <!-- 6 Pilares -->
+  <div style="font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin-bottom:16px">6 Pilares Estratégicos</div>
+  <div class="strategy-grid">
+    <div class="pillar-card">
+      <div class="pillar-num">01</div>
+      <div class="pillar-title">Ressignificar o desconforto</div>
+      <div class="pillar-text">Frio, calor, pausa e respiração deixam de ser obstáculos e passam a funcionar como ferramentas de presença, recuperação, resiliência e força. O desconforto com intenção é crescimento.</div>
+      <div class="pillar-phrase">"O crescimento começa no desconforto."</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">02</div>
+      <div class="pillar-title">Recuperar melhor para viver melhor</div>
+      <div class="pillar-text">Recovery não é só pós-treino. É dormir melhor, lidar com estresse, reduzir desgaste, recuperar energia. Uma rotina que permite viver, treinar e performar com mais qualidade.</div>
+      <div class="pillar-phrase">"Recovery não é pausa da vida. É o que permite viver mais forte."</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">03</div>
+      <div class="pillar-title">Dopamina de verdade</div>
+      <div class="pillar-text">Em um mundo hiperestimulado, a Neurofood propõe uma volta ao corpo. Gelo, calor e respiração criam sensações reais: foco, energia, alívio, orgulho, calma e controle.</div>
+      <div class="pillar-phrase">"Menos anestesia. Mais sensação real."</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">04</div>
+      <div class="pillar-title">Sucesso é bem-estar</div>
+      <div class="pillar-text">A Neurofood não acredita em atalhos, pílulas mágicas ou promessas milagrosas. Defende práticas simples, naturais e consistentes — aplicadas com ciência, segurança e intenção. Viver bem é parte da ambição.</div>
+      <div class="pillar-phrase">"Viver bem é parte da performance."</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">05</div>
+      <div class="pillar-title">Rituais para pessoas comuns</div>
+      <div class="pillar-text">Não é só para atleta de alta performance. É para quem treina, trabalha, cria filhos, tem reunião às 8h — e ainda quer viver mais forte. A Neurofood constrói rituais desejáveis, práticos e compartilháveis para diferentes estilos de vida.</div>
+      <div class="pillar-phrase">"Recovery para a vida real, não só para o pódio."</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">06</div>
+      <div class="pillar-title">A marca do atleta híbrido</div>
+      <div class="pillar-text">Para quem treina, trabalha, socializa e busca performance sem transformar saúde em prisão. Superar limites sem perder a vida — aprender a recuperar, pausar e cuidar com inteligência.</div>
+      <div class="pillar-phrase">"Alta performance, vida real."</div>
+    </div>
+  </div>
+
+  <!-- 3 Personas -->
+  <div style="font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin:32px 0 16px">3 Personas Estratégicas</div>
+  <div class="persona-grid">
+    <div class="persona-card">
+      <div class="persona-avatar">🏃</div>
+      <div class="persona-name">Marcos, 33</div>
+      <div class="persona-role">O Atleta Híbrido</div>
+      <div class="persona-text">Mora em SP. Trabalha com conteúdo, saúde, performance e empreendedorismo. Trilha, corrida, yoga, camps com amigos. Usa sauna para desacelerar e dormir melhor. A banheira entra como ferramenta de recuperação, disciplina e superação. Para ele, recovery faz parte do treino.</div>
+      <div class="persona-tension"><div class="pt-label">Busca</div><div class="pt-text">Energia, clareza mental, recuperação e evolução constante.</div></div>
+      <div class="pillar-phrase" style="margin-top:10px">"O corpo é templo. Recuperar também é treino."</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-avatar">💼</div>
+      <div class="persona-name">Rafael, 39</div>
+      <div class="persona-role">O Alta Performance Urbano</div>
+      <div class="persona-text">SP. Empresário ou executivo. Vive entre reuniões, treino encaixado e pouco tempo para desligar. Musculação, corrida, relógio esportivo, podcasts de saúde. Compra qualidade, autoridade e praticidade — sem paciência para hype vazio.</div>
+      <div class="persona-tension"><div class="pt-label">Tensão</div><div class="pt-text">Tem dinheiro para investir mas não tem paciência para produto confuso ou marketing vazio.</div></div>
+      <div class="pillar-phrase" style="margin-top:10px">"Às vezes, performar é saber recuperar."</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-avatar">🌊</div>
+      <div class="persona-name">Marina, 31</div>
+      <div class="persona-role">Autocuidado Intencional</div>
+      <div class="persona-text">Mora em Floripa. Marketing, branding, saúde ou empreende. Corrida, yoga, pilates, beach tennis, academias boutique. Usa a banheira como ritual de superação. A sauna entra pela manhã ou em experiências coletivas. Quer força, estética, suor, pele, luz — não wellness bege e passivo.</div>
+      <div class="persona-tension"><div class="pt-label">Busca</div><div class="pt-text">Energia, presença, estética, superação e autocuidado inteligente.</div></div>
+      <div class="pillar-phrase" style="margin-top:10px">"Recovery vira experiência: no treino, em eventos, com amigas."</div>
+    </div>
+  </div>
+
+  <!-- Voz e Inimigos -->
+  <div class="analysis-grid" style="margin-top:8px">
+    <div class="a-card">
+      <div class="a-title">Tom de Voz + Mantras</div>
+      <div class="a-text">Jovem, direto, provocativo. Científico sem ser difícil. Cool, urbano, sensorial. Aspiracional sem clichê. Sem misticismo, sem promessa milagrosa, sem linguagem corporativa.</div>
+      <div class="tags" style="margin-top:10px">
+        <span class="tag green">O crescimento começa no desconforto.</span>
+        <span class="tag green">Recuperar melhor para viver mais forte.</span>
+        <span class="tag green">Make healthy cool again.</span>
+        <span class="tag green">Anti performance, performance club.</span>
+      </div>
+    </div>
+    <div class="a-card">
+      <div class="a-title">Inimigos Culturais</div>
+      <div class="a-text">Tudo que a Neurofood não é:</div>
+      <div class="tags" style="margin-top:10px">
+        <span class="tag">Pílulas mágicas</span><span class="tag">Atalhos</span><span class="tag">Performance fake</span><span class="tag">Wellness genérico</span><span class="tag">Culto à exaustão</span><span class="tag">Medo do desconforto</span><span class="tag">Produtos sem ciência</span><span class="tag">Desconto como argumento</span>
+      </div>
+      <div style="margin-top:14px;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gray);margin-bottom:6px">Keywords do Universo da Marca</div>
+      <div class="tags">
+        <span class="tag green">Pausa</span><span class="tag green">Alívio</span><span class="tag green">Recovery</span><span class="tag green">Disciplina</span><span class="tag green">Superação</span><span class="tag green">Corpo ativo</span><span class="tag green">Vida em movimento</span><span class="tag green">Esportivo</span><span class="tag green">Moderno</span><span class="tag green">Urbano</span><span class="tag green">Lifestyle</span>
+      </div>
+    </div>
+    <div class="a-card">
+      <div class="a-title">Expansão de Portfólio</div>
+      <div class="a-text">Roadmap de produtos validado na imersão de marca:</div>
+      <div style="margin-top:10px;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--green);margin-bottom:5px">Curto Prazo</div>
+      <div class="tags">
+        <span class="tag green">Blends óleos essenciais para sauna</span>
+        <span class="tag green">Sais de magnésio para banheira</span>
+        <span class="tag green">Kit limpeza e manutenção</span>
+        <span class="tag green">Óculos bloqueadores de luz azul</span>
+      </div>
+      <div style="margin-top:10px;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#888;margin-bottom:5px">Médio Prazo</div>
+      <div class="tags">
+        <span class="tag">Red light / Infrared light</span>
+        <span class="tag">Botas de compressão</span>
+        <span class="tag">Meias de compressão</span>
+        <span class="tag">Tapete infravermelho</span>
+        <span class="tag">Kit mobilidade premium</span>
+        <span class="tag">Poncho · Toalha · Dry bag</span>
+      </div>
+      <div style="margin-top:10px;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#555;margin-bottom:5px">Estratégico</div>
+      <div class="tags">
+        <span class="tag">Neurofood Experience (B2B+B2C)</span>
+        <span class="tag">Kits de ritual (Pós-treino · Sono · Atleta)</span>
+        <span class="tag">Conteúdo educativo + protocolos</span>
+        <span class="tag">Área de membros</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-label">A bandeira a cravar</div>
+    <div class="insight-text">A Neurofood está em momento de reposicionamento. Já tem produto, tração, reconhecimento e comunidade latente. O próximo passo é sair de <strong>"vendemos banheiras e saunas"</strong> para <strong>"criamos uma cultura de recovery, presença e longevidade ativa para pessoas que querem viver mais forte."</strong> O objetivo é transformar produto em ritual, ritual em identidade e identidade em comunidade.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="nf-footer">
+  <span class="nf-footer-text">Board de Inteligência Competitiva · <strong>Neurofood Shop</strong> × Estúdio Flamma · 2026</span>
+  <div style="display:flex;gap:10px">
+    <button class="btn btn-ghost" onclick="window.print()" style="font-size:10px">⬇ Salvar PDF</button>
+    <a class="btn btn-green" href="https://www.neurofoodshop.com.br" target="_blank" style="font-size:10px">↗ Neurofood Shop</a>
+  </div>
+</footer>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const sec = document.getElementById('sec-' + id);
+  if (sec) sec.classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  const btns = Array.from(document.querySelectorAll('.nav-btn'));
+  const active = btns.findIndex(b => b.classList.contains('active'));
+  if (e.key === 'ArrowRight' && active < btns.length - 1) btns[active + 1].click();
+  if (e.key === 'ArrowLeft' && active > 0) btns[active - 1].click();
+});
+</script>
+</body>
+</html>
